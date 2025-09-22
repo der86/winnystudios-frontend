@@ -40,7 +40,20 @@ export default function Checkout() {
       qty: item.qty ?? 1,
     }));
 
-    const orderData = { ...form, items: formattedItems };
+    const orderData = {
+      customer: {
+        name: form.name,
+        email: form.email,
+        phone: form.phone,
+        address: form.address,
+        notes: form.notes || "",
+      },
+      items: formattedItems,
+      total: formattedItems.reduce(
+        (sum, item) => sum + item.price * item.qty,
+        0
+      ),
+    };
 
     try {
       setLoading(true);
