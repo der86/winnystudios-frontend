@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 
+const API_URL = import.meta.env.VITE_API_BASE_URL;
+
 export default function AdminOrders() {
   const { token } = useAuth();
   const [orders, setOrders] = useState([]);
@@ -8,7 +10,7 @@ export default function AdminOrders() {
   useEffect(() => {
     async function loadOrders() {
       try {
-        const res = await fetch("http://localhost:5000/api/orders", {
+        const res = await fetch(`${API_URL}/api/orders`, {
           headers: { Authorization: `Bearer ${token}` }, // ✅ fixed
         });
 

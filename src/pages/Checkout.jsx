@@ -4,6 +4,8 @@ import { useAuth } from "../context/AuthContext";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+const API_URL = import.meta.env.VITE_API_BASE_URL;
+
 export default function Checkout() {
   const { cart, clearCart } = useCart();
   const { token } = useAuth();
@@ -43,7 +45,7 @@ export default function Checkout() {
     try {
       setLoading(true);
 
-      const res = await fetch("http://localhost:5000/api/orders", {
+      const res = await fetch(`${API_URL}/api/orders`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

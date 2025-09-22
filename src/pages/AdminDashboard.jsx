@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import api from "../utils/axios"; // ✅ axios instance
 import { useAuth } from "../context/AuthContext";
+const API_URL = import.meta.env.VITE_API_BASE_URL;
 
 export default function AdminDashboard() {
   const { token } = useAuth();

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+const API_URL = import.meta.env.VITE_API_BASE_URL;
 
 import { useCart } from "../context/CartContext";
 
@@ -10,8 +11,7 @@ export default function HomePage() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        // 👇 Adjust to your backend port
-        const { data } = await axios.get("http://localhost:5000/api/products");
+        const { data } = await axios.get(`${API_URL}/api/products`);
 
         console.log("📦 Products API response:", data); // debug
         setProducts(Array.isArray(data) ? data : []);
@@ -25,7 +25,6 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      
       {/* Hero Section */}
       <section className="bg-[#A7DBDB] py-12 text-center">
         <h1 className="text-3xl md:text-4xl font-serif text-black mb-4">
@@ -43,15 +42,19 @@ export default function HomePage() {
               key={product._id}
               className="bg-white shadow rounded-lg p-4 hover:shadow-lg transition"
             >
-            {product.image && (
-  <img
-    src={`${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}${product.image}`}
-    alt={product.name}
-    className="h-40 w-full object-cover rounded mb-3"
-    crossOrigin="anonymous"
-    onError={(e) => { e.target.src = "/fallback.png"; }} // optional fallback
-  />
-)}
+              {product.image && (
+                <img
+                  src={`${
+                    import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"
+                  }${product.image}`}
+                  alt={product.name}
+                  className="h-40 w-full object-cover rounded mb-3"
+                  crossOrigin="anonymous"
+                  onError={(e) => {
+                    e.target.src = "/fallback.png";
+                  }} // optional fallback
+                />
+              )}
               <h3 className="text-lg font-semibold">{product.name}</h3>
               <p className="text-gray-600">${product.price}</p>
               <button

@@ -1,6 +1,7 @@
 // src/pages/MyOrders.jsx
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
+const API_URL = import.meta.env.VITE_API_BASE_URL;
 
 export default function MyOrders() {
   const { token } = useAuth();
@@ -10,7 +11,7 @@ export default function MyOrders() {
   useEffect(() => {
     async function fetchOrders() {
       try {
-        const res = await fetch("http://localhost:5000/api/orders/my", {
+        const res = await fetch(`${API_URL}/api/orders/my`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
