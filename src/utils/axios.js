@@ -2,7 +2,7 @@
 import axios from "axios";
 
 const instance = axios.create({
-  baseURL: "http://localhost:5000", // backend API
+  baseURL: "https://winnystudios-backend-8.onrender.com", // backend API
   withCredentials: false,
 });
 
