@@ -19,7 +19,7 @@ export default function Checkout() {
 
   const [loading, setLoading] = useState(false);
 
-  // ✅ Handle form changes dynamically
+  // ✅ Handle form input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
@@ -40,19 +40,12 @@ export default function Checkout() {
       qty: item.qty ?? 1,
     }));
 
+    // ✅ Match backend schema (no nested customer object)
     const orderData = {
-      customer: {
-        name: form.name,
-        email: form.email,
-        phone: form.phone,
-        address: form.address,
-        notes: form.notes || "",
-      },
+      phone: form.phone,
+      address: form.address,
+      notes: form.notes || "",
       items: formattedItems,
-      total: formattedItems.reduce(
-        (sum, item) => sum + item.price * item.qty,
-        0
-      ),
     };
 
     try {
@@ -67,10 +60,15 @@ export default function Checkout() {
         body: JSON.stringify(orderData),
       });
 
-      const data = await res.json();
+      let data = {};
+      try {
+        data = await res.json();
+      } catch {
+        console.warn("⚠️ Server did not return JSON");
+      }
 
       if (!res.ok) {
-        throw new Error(data.error || "Unknown error occurred");
+        throw new Error(data.error || "Server error");
       }
 
       // ✅ Clear cart ONLY if order was successful
