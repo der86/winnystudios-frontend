@@ -55,7 +55,7 @@ const ProductDescription = () => {
         }}
       />
       <p className="text-gray-700 mb-2">
-        <strong>Price:</strong> ${product.price}
+        <strong>Price:</strong> ksh{product.price}
       </p>
       <p className="text-gray-700 mb-2">
         <strong>Category:</strong> {product.category}

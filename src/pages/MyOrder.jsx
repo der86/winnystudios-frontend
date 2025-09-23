@@ -100,7 +100,7 @@ export default function MyOrders() {
               <ul className="list-disc pl-5 space-y-1 text-sm text-gray-600">
                 {order.items.map((item, idx) => (
                   <li key={idx}>
-                    {item.name} x{item.qty} — ${item.price * item.qty}
+                    {item.name} x{item.qty} — ksh{item.price * item.qty}
                   </li>
                 ))}
               </ul>
@@ -109,7 +109,7 @@ export default function MyOrders() {
             {/* Total + Date */}
             <div className="flex justify-between items-center text-sm text-gray-600">
               <p>
-                <b>Total:</b> ${order.total}
+                <b>Total:</b> ksh{order.total}
               </p>
               <p>
                 <b>Date:</b>{" "}

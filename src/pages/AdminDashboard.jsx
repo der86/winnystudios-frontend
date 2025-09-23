@@ -239,7 +239,7 @@ export default function AdminDashboard() {
                   )}
                 </td>
                 <td className="border p-2">{product.name}</td>
-                <td className="border p-2">${product.price}</td>
+                <td className="border p-2">ksh{product.price}</td>
                 <td className="border p-2 max-w-xs truncate">
                   {product.description}
                 </td>

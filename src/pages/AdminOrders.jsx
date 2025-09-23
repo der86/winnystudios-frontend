@@ -40,7 +40,7 @@ export default function AdminOrders() {
               <ul className="mt-2">
                 {order.items.map((item, i) => (
                   <li key={i}>
-                    {item.name} x{item.qty} — ${item.price * item.qty}
+                    {item.name} x{item.qty} — ksh{item.price * item.qty}
                   </li>
                 ))}
               </ul>

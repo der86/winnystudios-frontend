@@ -25,7 +25,7 @@ export default function ProductCard({ product }) {
           )}
         </div>
         <h3 className="font-semibold mb-2">{product.name}</h3>
-        <p className="mb-2">${product.price}</p>
+        <p className="mb-2">ksh{product.price}</p>
       </Link>
 
       {/* 🛒 Add to Cart stays independent */}
