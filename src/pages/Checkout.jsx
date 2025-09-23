@@ -1,10 +1,9 @@
-// src/pages/Checkout.jsx
-import { useCart } from "../context/CartContext";
-import { useAuth } from "../context/AuthContext";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useCart } from "../context/CartContext";
+import { useAuth } from "../context/AuthContext";
 
-const API_URL = import.meta.env.VITE_API_BASE_URL;
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 export default function Checkout() {
   const { cart, clearCart } = useCart();
@@ -28,6 +27,7 @@ export default function Checkout() {
   // ✅ Submit order
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (cart.length === 0) {
       alert("⚠️ Your cart is empty!");
       return;
@@ -40,7 +40,6 @@ export default function Checkout() {
       qty: item.qty ?? 1,
     }));
 
-    // ✅ Match backend schema (no nested customer object)
     const orderData = {
       phone: form.phone,
       address: form.address,
@@ -60,23 +59,26 @@ export default function Checkout() {
         body: JSON.stringify(orderData),
       });
 
-      let data = {};
+      // ✅ safely parse response
+      let data;
       try {
         data = await res.json();
-      } catch {
-        console.warn("⚠️ Server did not return JSON");
+      } catch (err) {
+        throw new Error("Invalid server response");
       }
 
-      if (!res.ok) {
-        throw new Error(data.error || "Server error");
+      if (!res.ok || !data.success) {
+        throw new Error(data.message || "Failed to place order");
       }
 
-      // ✅ Clear cart ONLY if order was successful
+      // ✅ Clear cart only on success
       clearCart();
+
+      // ✅ Redirect to My Orders page
       navigate("/my-orders");
     } catch (err) {
-      console.error("Order failed:", err);
-      alert(`❌ Failed to place order: ${err.message}`);
+      console.error("❌ Order failed:", err);
+      alert(`Failed to place order: ${err.message}`);
     } finally {
       setLoading(false);
     }
@@ -88,63 +90,49 @@ export default function Checkout() {
   );
 
   return (
-    <div className="min-h-screen flex flex-col items-center bg-gray-100 py-10">
-      <h1 className="text-2xl font-bold mb-6">Checkout</h1>
+    <form
+      onSubmit={handleSubmit}
+      className="max-w-md mx-auto p-6 bg-white rounded-lg shadow"
+    >
+      <h2 className="text-2xl font-semibold mb-4">Checkout</h2>
 
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white p-6 rounded-lg shadow-md w-full max-w-md"
+      <input
+        type="text"
+        name="phone"
+        placeholder="Phone"
+        value={form.phone}
+        onChange={handleChange}
+        className="w-full mb-3 p-2 border rounded"
+        required
+      />
+
+      <input
+        type="text"
+        name="address"
+        placeholder="Address"
+        value={form.address}
+        onChange={handleChange}
+        className="w-full mb-3 p-2 border rounded"
+        required
+      />
+
+      <textarea
+        name="notes"
+        placeholder="Notes (optional)"
+        value={form.notes}
+        onChange={handleChange}
+        className="w-full mb-3 p-2 border rounded"
+      />
+
+      <p className="mb-4 font-medium">Total: ${total.toFixed(2)}</p>
+
+      <button
+        type="submit"
+        disabled={loading}
+        className="w-full bg-blue-600 text-white py-2 rounded disabled:opacity-50"
       >
-        {/* Phone Number */}
-        <input
-          type="tel"
-          name="phone"
-          placeholder="Phone Number"
-          value={form.phone}
-          onChange={handleChange}
-          required
-          className="w-full mb-3 p-2 border rounded"
-        />
-
-        {/* Address */}
-        <textarea
-          name="address"
-          placeholder="Shipping Address"
-          value={form.address}
-          onChange={handleChange}
-          required
-          className="w-full mb-3 p-2 border rounded"
-        />
-
-        {/* Notes */}
-        <textarea
-          name="notes"
-          placeholder="Order Notes (optional)"
-          value={form.notes}
-          onChange={handleChange}
-          className="w-full mb-3 p-2 border rounded"
-        />
-
-        {/* Order Summary */}
-        <h2 className="font-semibold mb-2">Order Summary:</h2>
-        <div className="text-sm mb-3">
-          {cart.map((item) => (
-            <p key={item._id || item.id}>
-              {item.name} x{item.qty ?? 1} — ${item.price * (item.qty ?? 1)}
-            </p>
-          ))}
-        </div>
-
-        <p className="mt-2 font-bold">Total: ${total.toFixed(2)}</p>
-
-        <button
-          type="submit"
-          disabled={loading}
-          className="mt-4 w-full bg-[#ff3f8e] text-white py-2 rounded-lg hover:bg-[#e5367b] disabled:opacity-60"
-        >
-          {loading ? "Placing Order..." : "Place Order"}
-        </button>
-      </form>
-    </div>
+        {loading ? "Placing..." : "Place Order"}
+      </button>
+    </form>
   );
 }
