@@ -13,11 +13,7 @@ const ProductDescription = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const res = await axios.get(
-          `${
-            import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"
-          }/api/products/${id}`
-        );
+        const res = await axios.get(`${API_URL}/api/products/${id}`);
         setProduct(res.data);
       } catch (err) {
         setError("Failed to load product details.");
@@ -44,9 +40,7 @@ const ProductDescription = () => {
 
       <h1 className="text-2xl font-bold mb-4">{product.name}</h1>
       <img
-        src={`${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}${
-          product.image
-        }`}
+        src={`${API_URL}${product.image}`}
         alt={product.name}
         className="w-full h-64 object-cover rounded mb-4"
         crossOrigin="anonymous"

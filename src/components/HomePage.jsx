@@ -44,9 +44,7 @@ export default function HomePage() {
             >
               {product.image && (
                 <img
-                  src={`${
-                    import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"
-                  }${product.image}`}
+                  src={`${API_URL}${product.image}`}
                   alt={product.name}
                   className="h-40 w-full object-cover rounded mb-3"
                   crossOrigin="anonymous"

@@ -113,11 +113,11 @@ export default function Checkout() {
         <div className="text-sm mb-3">
           {cart.map((item) => (
             <p key={item._id || item.id}>
-              {item.name} x{item.qty ?? 1} — ${item.price * (item.qty ?? 1)}
+              {item.name} x{item.qty ?? 1} — ksh{item.price * (item.qty ?? 1)}
             </p>
           ))}
         </div>
-        <p className="mt-2 font-bold">Total: ${total.toFixed(2)}</p>
+        <p className="mt-2 font-bold">Total: ksh{total.toFixed(2)}</p>
         <button
           type="submit"
           disabled={loading}

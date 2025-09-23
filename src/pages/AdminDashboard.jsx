@@ -222,10 +222,7 @@ export default function AdminDashboard() {
                     product.images.map((img, i) => (
                       <img
                         key={i}
-                        src={`${
-                          import.meta.env.VITE_API_BASE_URL ||
-                          "http://localhost:5000"
-                        }${img}`}
+                        src={`${API_URL}${img}`}
                         alt={product.name}
                         className="h-20 w-20 object-cover rounded inline-block mr-2"
                         crossOrigin="anonymous"

@@ -5,7 +5,10 @@ export default function Cart() {
   const { cart, removeFromCart, updateQty } = useCart();
   const navigate = useNavigate();
 
-  const total = cart.reduce((sum, item) => sum + item.price * (item.qty ?? 1), 0);
+  const total = cart.reduce(
+    (sum, item) => sum + item.price * (item.qty ?? 1),
+    0
+  );
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
@@ -24,21 +27,27 @@ export default function Cart() {
 
               <div className="flex items-center space-x-2">
                 <button
-                  onClick={() => updateQty(item._id || item.id, (item.qty ?? 1) - 1)}
+                  onClick={() =>
+                    updateQty(item._id || item.id, (item.qty ?? 1) - 1)
+                  }
                   className="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300"
                 >
                   -
                 </button>
                 <span>{item.qty ?? 1}</span>
                 <button
-                  onClick={() => updateQty(item._id || item.id, (item.qty ?? 1) + 1)}
+                  onClick={() =>
+                    updateQty(item._id || item.id, (item.qty ?? 1) + 1)
+                  }
                   className="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300"
                 >
                   +
                 </button>
               </div>
 
-              <span className="w-20 text-right">${(item.price * (item.qty ?? 1)).toFixed(2)}</span>
+              <span className="w-20 text-right">
+                ksh{(item.price * (item.qty ?? 1)).toFixed(2)}
+              </span>
 
               <button
                 onClick={() => removeFromCart(item._id || item.id)}
@@ -51,7 +60,7 @@ export default function Cart() {
 
           <div className="flex justify-between font-semibold text-lg pt-4 border-t">
             <span>Total:</span>
-            <span>${total.toFixed(2)}</span>
+            <span>ksh{total.toFixed(2)}</span>
           </div>
 
           <button
