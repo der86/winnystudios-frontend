@@ -56,7 +56,7 @@ export default function HomePage() {
                 />
               )}
               <h3 className="text-lg font-semibold">{product.name}</h3>
-              <p className="text-gray-600">${product.price}</p>
+              <p className="text-gray-600">ksh{product.price}</p>
               <button
                 onClick={() => addToCart(product)}
                 className="mt-3 w-full bg-[#ff3f8e] text-white py-2 rounded hover:bg-[#e5367b]"
