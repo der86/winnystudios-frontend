@@ -12,8 +12,6 @@ export default function Checkout() {
   const navigate = useNavigate();
 
   const [form, setForm] = useState({
-    name: "",
-    email: "",
     phone: "",
     address: "",
     notes: "",
@@ -21,11 +19,13 @@ export default function Checkout() {
 
   const [loading, setLoading] = useState(false);
 
+  // ✅ Handle form input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
+  // ✅ Submit order
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (cart.length === 0) {
@@ -40,19 +40,12 @@ export default function Checkout() {
       qty: item.qty ?? 1,
     }));
 
+    // ✅ Match backend schema (no nested customer object)
     const orderData = {
-      customer: {
-        name: form.name || "Guest",
-        email: form.email || "guest@example.com",
-        phone: form.phone,
-        address: form.address,
-        notes: form.notes || "",
-      },
+      phone: form.phone,
+      address: form.address,
+      notes: form.notes || "",
       items: formattedItems,
-      total: formattedItems.reduce(
-        (sum, item) => sum + item.price * item.qty,
-        0
-      ),
     };
 
     try {
@@ -67,12 +60,18 @@ export default function Checkout() {
         body: JSON.stringify(orderData),
       });
 
-      const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.error || "Unknown error occurred");
+      let data = {};
+      try {
+        data = await res.json();
+      } catch {
+        console.warn("⚠️ Server did not return JSON");
       }
 
+      if (!res.ok) {
+        throw new Error(data.error || "Server error");
+      }
+
+      // ✅ Clear cart ONLY if order was successful
       clearCart();
       navigate("/my-orders");
     } catch (err) {
@@ -96,29 +95,7 @@ export default function Checkout() {
         onSubmit={handleSubmit}
         className="bg-white p-6 rounded-lg shadow-md w-full max-w-md"
       >
-        {/* Name */}
-        <input
-          type="text"
-          name="name"
-          placeholder="Full Name"
-          value={form.name}
-          onChange={handleChange}
-          required
-          className="w-full mb-3 p-2 border rounded"
-        />
-
-        {/* Email */}
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={form.email}
-          onChange={handleChange}
-          required
-          className="w-full mb-3 p-2 border rounded"
-        />
-
-        {/* Phone */}
+        {/* Phone Number */}
         <input
           type="tel"
           name="phone"

@@ -1,7 +1,6 @@
 // src/pages/MyOrders.jsx
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
-
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
 export default function MyOrders() {
@@ -80,21 +79,15 @@ export default function MyOrders() {
               </span>
             </div>
 
-            {/* Customer Info (Safe checks) */}
+            {/* Customer Info */}
             <div className="mb-4 text-sm text-gray-700">
               <p>
-                <b>Name:</b> {order.customer?.name || "N/A"}
+                <b>Phone:</b> {order.customer.phone}
               </p>
               <p>
-                <b>Email:</b> {order.customer?.email || "N/A"}
+                <b>Address:</b> {order.customer.address}
               </p>
-              <p>
-                <b>Phone:</b> {order.customer?.phone || "N/A"}
-              </p>
-              <p>
-                <b>Address:</b> {order.customer?.address || "N/A"}
-              </p>
-              {order.customer?.notes && (
+              {order.customer.notes && (
                 <p>
                   <b>Notes:</b> {order.customer.notes}
                 </p>
@@ -105,7 +98,7 @@ export default function MyOrders() {
             <div className="mb-4">
               <h3 className="font-semibold mb-2">Items</h3>
               <ul className="list-disc pl-5 space-y-1 text-sm text-gray-600">
-                {order.items?.map((item, idx) => (
+                {order.items.map((item, idx) => (
                   <li key={idx}>
                     {item.name} x{item.qty} — ${item.price * item.qty}
                   </li>
@@ -120,13 +113,11 @@ export default function MyOrders() {
               </p>
               <p>
                 <b>Date:</b>{" "}
-                {order.createdAt
-                  ? new Date(order.createdAt).toLocaleDateString("en-US", {
-                      year: "numeric",
-                      month: "short",
-                      day: "numeric",
-                    })
-                  : "N/A"}
+                {new Date(order.createdAt).toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric",
+                })}
               </p>
             </div>
           </div>
