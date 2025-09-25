@@ -1,6 +1,14 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
+
+// ✅ Import Swiper
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
 const ProductDescription = () => {
@@ -29,13 +37,6 @@ const ProductDescription = () => {
   if (error) return <div className="p-4 text-red-500">{error}</div>;
   if (!product) return <div className="p-4">No product found.</div>;
 
-  // ✅ Handle Cloudinary images
-  const productImage =
-    product.image ||
-    (Array.isArray(product.images) && product.images.length > 0
-      ? product.images[0]
-      : null);
-
   return (
     <div className="max-w-3xl mx-auto p-4">
       <button
@@ -47,21 +48,30 @@ const ProductDescription = () => {
 
       <h1 className="text-2xl font-bold mb-4">{product.name}</h1>
 
-      {productImage ? (
-        <img
-          src={productImage} // ✅ Cloudinary URL is already valid
-          alt={product.name}
-          className="w-full h-64 object-cover rounded mb-4"
-          crossOrigin="anonymous"
-          onError={(e) => {
-            e.target.src = "/fallback.png";
-          }}
-        />
+      {/* ✅ Carousel for product images */}
+      {Array.isArray(product.images) && product.images.length > 0 ? (
+        <Swiper
+          modules={[Navigation, Pagination]}
+          navigation
+          pagination={{ clickable: true }}
+          className="mb-6 rounded-lg shadow-lg"
+        >
+          {product.images.map((imgUrl, index) => (
+            <SwiperSlide key={index}>
+              <img
+                src={imgUrl}
+                alt={`${product.name} ${index + 1}`}
+                className="w-full h-80 object-cover rounded-lg"
+                onError={(e) => (e.target.src = "/fallback.png")}
+              />
+            </SwiperSlide>
+          ))}
+        </Swiper>
       ) : (
         <img
-          src="/fallback.png"
-          alt="No image"
-          className="w-full h-64 object-cover rounded mb-4"
+          src={product.image || "/fallback.png"}
+          alt={product.name}
+          className="w-full h-80 object-cover rounded-lg mb-6"
         />
       )}
 
@@ -79,3 +89,4 @@ const ProductDescription = () => {
 };
 
 export default ProductDescription;
+s

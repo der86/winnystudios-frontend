@@ -44,15 +44,15 @@ export default function HomePage() {
             >
               {product.image && (
                 <img
-                  src={`${API_URL}${product.image}`}
+                  src={product.image} // ✅ use directly
                   alt={product.name}
                   className="h-40 w-full object-cover rounded mb-3"
-                  crossOrigin="anonymous"
                   onError={(e) => {
                     e.target.src = "/fallback.png";
-                  }} // optional fallback
+                  }}
                 />
               )}
+
               <h3 className="text-lg font-semibold">{product.name}</h3>
               <p className="text-gray-600">ksh{product.price}</p>
               <button
