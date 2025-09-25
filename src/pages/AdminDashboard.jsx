@@ -222,13 +222,10 @@ export default function AdminDashboard() {
                     product.images.map((img, i) => (
                       <img
                         key={i}
-                        src={`${API_URL}${img}`}
+                        src={img} // ✅ Cloudinary URL already complete
                         alt={product.name}
                         className="h-20 w-20 object-cover rounded inline-block mr-2"
-                        crossOrigin="anonymous"
-                        onError={(e) => {
-                          e.target.src = "/fallback.png";
-                        }}
+                        onError={(e) => (e.target.src = "/fallback.png")}
                       />
                     ))
                   ) : (

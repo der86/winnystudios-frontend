@@ -1,6 +1,7 @@
 // src/pages/MyOrders.jsx
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
+
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
 export default function MyOrders() {
@@ -18,8 +19,11 @@ export default function MyOrders() {
         });
         const data = await res.json();
 
+        console.log("📦 Orders API response:", data);
+
         if (res.ok) {
-          setOrders(data);
+          // ✅ Use the `data` array inside the response
+          setOrders(data.data || []);
         } else {
           console.error("❌ Failed to fetch orders:", data.error);
         }
@@ -82,12 +86,12 @@ export default function MyOrders() {
             {/* Customer Info */}
             <div className="mb-4 text-sm text-gray-700">
               <p>
-                <b>Phone:</b> {order.customer.phone}
+                <b>Phone:</b> {order.customer?.phone}
               </p>
               <p>
-                <b>Address:</b> {order.customer.address}
+                <b>Address:</b> {order.customer?.address}
               </p>
-              {order.customer.notes && (
+              {order.customer?.notes && (
                 <p>
                   <b>Notes:</b> {order.customer.notes}
                 </p>
@@ -97,10 +101,27 @@ export default function MyOrders() {
             {/* Items */}
             <div className="mb-4">
               <h3 className="font-semibold mb-2">Items</h3>
-              <ul className="list-disc pl-5 space-y-1 text-sm text-gray-600">
+              <ul className="space-y-3">
                 {order.items.map((item, idx) => (
-                  <li key={idx}>
-                    {item.name} x{item.qty} — ksh{item.price * item.qty}
+                  <li
+                    key={idx}
+                    className="flex items-center gap-3 text-sm text-gray-600"
+                  >
+                    {/* ✅ Show first image if exists */}
+                    {item.images && item.images.length > 0 && (
+                      <img
+                        src={item.images[0]}
+                        alt={item.name}
+                        className="h-12 w-12 object-cover rounded"
+                        onError={(e) => (e.target.src = "/fallback.png")}
+                      />
+                    )}
+                    <div>
+                      <p className="font-medium">{item.name}</p>
+                      <p className="text-gray-500">
+                        x{item.qty} — ksh{item.price * item.qty}
+                      </p>
+                    </div>
                   </li>
                 ))}
               </ul>

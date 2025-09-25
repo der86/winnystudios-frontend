@@ -15,6 +15,7 @@ export default function Checkout() {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   }; // ✅ Submit order
+  // ✅ Submit order
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (cart.length === 0) {
@@ -27,6 +28,7 @@ export default function Checkout() {
       name: item.name,
       price: item.price,
       qty: item.qty ?? 1,
+      images: item.images || [], // ✅ include product images
     }));
 
     const orderData = {
@@ -54,13 +56,12 @@ export default function Checkout() {
         },
         body: JSON.stringify(orderData),
       });
+
       const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.error || "Unknown error occurred");
-      }
-      // ✅ Clear cart ONLY if order was successful
+      if (!res.ok) throw new Error(data.error || "Unknown error occurred");
+
       clearCart();
-      navigate("/my-orders");
+      navigate("/my-orders"); // ✅ redirect after success
     } catch (err) {
       console.error("Order failed:", err);
       alert(`❌ Failed to place order: ${err.message}`);
