@@ -10,11 +10,14 @@ export default function Checkout() {
   const { token } = useAuth();
   const navigate = useNavigate();
   const [form, setForm] = useState({ phone: "", address: "", notes: "" });
-  const [loading, setLoading] = useState(false); // ✅ Handle form changes dynamically
+  const [loading, setLoading] = useState(false);
+
+  // ✅ Handle form input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
-  }; // ✅ Submit order
+  };
+
   // ✅ Submit order
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -28,17 +31,13 @@ export default function Checkout() {
       name: item.name,
       price: item.price,
       qty: item.qty ?? 1,
-      images: item.images || [], // ✅ include product images
+      image: item.image || item.images?.[0] || "", // ✅ send a single image
     }));
 
     const orderData = {
-      customer: {
-        name: form.name,
-        email: form.email,
-        phone: form.phone,
-        address: form.address,
-        notes: form.notes || "",
-      },
+      phone: form.phone,
+      address: form.address,
+      notes: form.notes || "",
       items: formattedItems,
       total: formattedItems.reduce(
         (sum, item) => sum + item.price * item.qty,
@@ -63,7 +62,7 @@ export default function Checkout() {
       clearCart();
       navigate("/my-orders"); // ✅ redirect after success
     } catch (err) {
-      console.error("Order failed:", err);
+      console.error("❌ Order failed:", err);
       alert(`❌ Failed to place order: ${err.message}`);
     } finally {
       setLoading(false);
@@ -92,6 +91,7 @@ export default function Checkout() {
           required
           className="w-full mb-3 p-2 border rounded"
         />
+
         {/* Address */}
         <textarea
           name="address"
@@ -101,6 +101,7 @@ export default function Checkout() {
           required
           className="w-full mb-3 p-2 border rounded"
         />
+
         {/* Notes */}
         <textarea
           name="notes"
@@ -109,6 +110,7 @@ export default function Checkout() {
           onChange={handleChange}
           className="w-full mb-3 p-2 border rounded"
         />
+
         {/* Order Summary */}
         <h2 className="font-semibold mb-2">Order Summary:</h2>
         <div className="text-sm mb-3">
@@ -119,6 +121,7 @@ export default function Checkout() {
           ))}
         </div>
         <p className="mt-2 font-bold">Total: ksh{total.toFixed(2)}</p>
+
         <button
           type="submit"
           disabled={loading}
