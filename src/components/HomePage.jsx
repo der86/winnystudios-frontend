@@ -1,18 +1,15 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 const API_URL = import.meta.env.VITE_API_BASE_URL;
-
 import { useCart } from "../context/CartContext";
 
 export default function HomePage() {
   const [products, setProducts] = useState([]);
   const { addToCart } = useCart();
-
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const { data } = await axios.get(`${API_URL}/api/products`);
-
         console.log("📦 Products API response:", data); // debug
         setProducts(Array.isArray(data) ? data : []);
       } catch (err) {
@@ -22,13 +19,13 @@ export default function HomePage() {
     };
     fetchProducts();
   }, []);
-
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
       <section className="bg-[#A7DBDB] py-12 text-center">
         <h1 className="text-3xl md:text-4xl font-serif text-black mb-4">
-          Welcome to WINNY Studio’s
+          {" "}
+          Welcome to WINNY Studio’s{" "}
         </h1>
         <p className="text-lg text-gray-700">Shop the latest household items</p>
       </section>
@@ -37,48 +34,36 @@ export default function HomePage() {
       <section className="max-w-6xl mx-auto py-12 px-4">
         <h2 className="text-2xl font-bold mb-6">Featured Products</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {products.map((product) => {
-            // ✅ Pick first image if multiple exist
-            const productImage =
-              product.image ||
-              (Array.isArray(product.images) && product.images.length > 0
-                ? product.images[0]
-                : null);
-
-            return (
-              <div
-                key={product._id}
-                className="bg-white shadow rounded-lg p-4 hover:shadow-lg transition"
+          {products.map((product) => (
+            <div
+              key={product._id}
+              className="bg-white shadow rounded-lg p-4 hover:shadow-lg transition"
+            >
+              {product.image && (
+                <img
+                  src={product.image} // ✅ use directly
+                  alt={product.name}
+                  className="h-40 w-full object-cover rounded mb-3"
+                  onError={(e) => {
+                    e.target.src = "/fallback.png";
+                  }}
+                />
+              )}
+              <h3 className="text-lg font-semibold">{product.name}</h3>
+              <p className="text-gray-600">ksh{product.price}</p>
+              <button
+                onClick={() => addToCart(product)}
+                className="mt-3 w-full bg-[#ff3f8e] text-white py-2 rounded hover:bg-[#e5367b]"
               >
-                {productImage && (
-                  <img
-                    src={
-                      productImage.startsWith("http")
-                        ? productImage
-                        : `${API_URL}${productImage}`
-                    }
-                    alt={product.name}
-                    className="h-40 w-full object-cover rounded mb-3"
-                    onError={(e) => {
-                      e.target.src = "/fallback.png";
-                    }}
-                  />
-                )}
-
-                <h3 className="text-lg font-semibold">{product.name}</h3>
-                <p className="text-gray-600">ksh{product.price}</p>
-                <button
-                  onClick={() => addToCart(product)}
-                  className="mt-3 w-full bg-[#ff3f8e] text-white py-2 rounded hover:bg-[#e5367b]"
-                >
-                  Add to Cart
-                </button>
-              </div>
-            );
-          })}
+                {" "}
+                Add to Cart{" "}
+              </button>
+            </div>
+          ))}
           {products.length === 0 && (
             <p className="col-span-full text-center text-gray-500">
-              No products available yet.
+              {" "}
+              No products available yet.{" "}
             </p>
           )}
         </div>
