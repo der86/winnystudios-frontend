@@ -1,4 +1,5 @@
 import { Routes, Route } from "react-router-dom";
+import { useEffect } from "react";
 
 import Register from "./pages/Register.jsx";
 import Login from "./pages/Login.jsx";
@@ -14,6 +15,21 @@ import Layout from "./components/Layout.jsx";
 import ProductDescription from "./components/ProductDescription.jsx";
 
 function App() {
+  useEffect(() => {
+    // Add DataFast script
+    const script = document.createElement("script");
+    script.defer = true;
+    script.setAttribute("data-website-id", "68d66023e7db27ae2a088687");
+    script.setAttribute("data-domain", "www.winnystudios.com");
+    script.src = "https://datafa.st/js/script.js";
+    document.head.appendChild(script);
+
+    // Cleanup on unmount
+    return () => {
+      document.head.removeChild(script);
+    };
+  }, []);
+
   return (
     <Routes>
       {/* Public Pages wrapped with Layout */}
