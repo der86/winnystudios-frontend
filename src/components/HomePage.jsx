@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 const API_URL = import.meta.env.VITE_API_BASE_URL;
+import { Link } from "react-router-dom";
 
 import { useCart } from "../context/CartContext";
 
@@ -50,23 +51,25 @@ export default function HomePage() {
                 key={product._id}
                 className="bg-white shadow rounded-lg p-4 hover:shadow-lg transition"
               >
-                {productImage && (
-                  <img
-                    src={
-                      productImage.startsWith("http")
-                        ? productImage
-                        : `${API_URL}${productImage}`
-                    }
-                    alt={product.name}
-                    className="h-40 w-full object-cover rounded mb-3"
-                    onError={(e) => {
-                      e.target.src = "/fallback.png";
-                    }}
-                  />
-                )}
+                <Link to={`/products/${product._id || product.id}`}>
+                  {productImage && (
+                    <img
+                      src={
+                        productImage.startsWith("http")
+                          ? productImage
+                          : `${API_URL}${productImage}`
+                      }
+                      alt={product.name}
+                      className="h-40 w-full object-cover rounded mb-3"
+                      onError={(e) => {
+                        e.target.src = "/fallback.png";
+                      }}
+                    />
+                  )}
 
-                <h3 className="text-lg font-semibold">{product.name}</h3>
-                <p className="text-gray-600">ksh{product.price}</p>
+                  <h3 className="text-lg font-semibold">{product.name}</h3>
+                  <p className="text-gray-600">ksh{product.price}</p>
+                </Link>
                 <button
                   onClick={() => addToCart(product)}
                   className="mt-3 w-full bg-[#ff3f8e] text-white py-2 rounded hover:bg-[#e5367b]"
