@@ -102,7 +102,6 @@
 //   );
 // }
 
-
 // src/components/Navbar.jsx
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
@@ -132,7 +131,7 @@ export default function Navbar() {
     <nav className="bg-[#ff3f8e] text-white px-6 py-3 flex justify-between items-center shadow-lg">
       {/* Left: Logo */}
       <Link to="/" className="text-2xl font-bold">
-        🛍️ Winny Studio's
+        🛍️ HavenLuxe
       </Link>
 
       {/* Center: Links */}

@@ -28,7 +28,7 @@ export default function HomePage() {
       {/* Hero Section */}
       <section className="bg-[#A7DBDB] py-12 text-center">
         <h1 className="text-3xl md:text-4xl font-serif text-black mb-4">
-          Welcome to WINNY Studio’s
+          Welcome to HavenLuxe
         </h1>
         <p className="text-lg text-gray-700">Shop the latest household items</p>
       </section>
